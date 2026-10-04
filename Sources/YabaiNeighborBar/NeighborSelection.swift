@@ -11,7 +11,7 @@ struct SelectedWindow: Equatable, Sendable {
 }
 
 /// A Space chosen for the menu bar, in the order it should be rendered:
-/// previous → current → next. `index` is the yabai Space label; `isCurrent` marks
+/// a contiguous range around the current Space. `index` is the yabai Space label; `isCurrent` marks
 /// the focused Space. An empty Space is still emitted (with no windows).
 struct SelectedSpace: Equatable, Sendable {
     let id: Int
@@ -31,7 +31,8 @@ enum NeighborSelector {
     ///   `id`) so first/last/only Space behave predictably.
     /// - The selected window is the one with `hasFocus == true`; if none is marked
     ///   in a consistent snapshot the selection is empty.
-    /// - Missing neighbors are omitted rather than compensated from the other side.
+    /// - Select up to three Spaces, compensating at either boundary when possible.
+    ///   `allSpaces` returns every Space on the focused display for the dropdown.
     /// - Within a Space, window ids follow the Space's `windows` array order, ids are
     ///   deduplicated within that Space only, and an id that cannot be resolved to a
     ///   window (or whose recorded `space` disagrees with the Space's `index`) is
@@ -52,13 +53,12 @@ enum NeighborSelector {
             return []
         }
 
-        var chosen: [YabaiSpace] = []
+        let chosen: [YabaiSpace]
         if allSpaces {
             chosen = displaySpaces
         } else {
-            if currentPosition > 0 { chosen.append(displaySpaces[currentPosition - 1]) }
-            chosen.append(displaySpaces[currentPosition])
-            if currentPosition + 1 < displaySpaces.count { chosen.append(displaySpaces[currentPosition + 1]) }
+            let start = min(max(0, currentPosition - 1), max(0, displaySpaces.count - 3))
+            chosen = Array(displaySpaces[start..<min(start + 3, displaySpaces.count)])
         }
 
         let windowsByID = Dictionary(

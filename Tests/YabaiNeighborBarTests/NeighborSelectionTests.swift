@@ -56,6 +56,19 @@ final class NeighborSelectionTests: XCTestCase {
         XCTAssertEqual(NeighborSelector.select(from: snapshot).map(\.index), [1, 2])
     }
 
+    func testBoundaryCompensationAndAllSpaces() {
+        let spaces = (1...5).map { space($0 * 11, index: $0, display: 1, focus: $0 == 1, windows: []) }
+        let first = makeSnapshot(displays: [display(1, focus: true)], spaces: spaces, windows: [])
+        XCTAssertEqual(NeighborSelector.select(from: first).map(\.index), [1, 2, 3])
+        XCTAssertEqual(NeighborSelector.select(from: first, allSpaces: true).map(\.index), [1, 2, 3, 4, 5])
+
+        let last = makeSnapshot(displays: [display(1, focus: true)], spaces: spaces.map {
+            space($0.id, index: $0.index, display: 1, focus: $0.index == 5, windows: [])
+        }, windows: [])
+        XCTAssertEqual(NeighborSelector.select(from: last).map(\.index), [3, 4, 5])
+        XCTAssertEqual(NeighborSelector.select(from: last, allSpaces: true).map(\.index), [1, 2, 3, 4, 5])
+    }
+
     func testOnlySpaceOnDisplaySelectsJustItself() {
         let snapshot = makeSnapshot(
             displays: [display(1, focus: true)],
@@ -148,8 +161,8 @@ final class NeighborSelectionTests: XCTestCase {
                      space(33, index: 2, display: 1, focus: false, windows: [])],
             windows: []
         )
-        // Sorted as id 11 then id 22, so current (id 11) is first → [11, 22].
-        XCTAssertEqual(NeighborSelector.select(from: snapshot).map(\.id), [11, 22])
+        // Sorted as id 11 then id 22; fill the third slot with id 33.
+        XCTAssertEqual(NeighborSelector.select(from: snapshot).map(\.id), [11, 22, 33])
     }
 
     // MARK: - Window membership

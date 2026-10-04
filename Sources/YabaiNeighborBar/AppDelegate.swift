@@ -54,13 +54,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func accept(_ result: Result<YabaiSnapshot, Error>) {
         switch result {
         case let .success(snapshot):
-            let selection = NeighborSelector.select(from: snapshot, allSpaces: true)
+            let selection = NeighborSelector.select(from: snapshot)
             guard !selection.isEmpty else {
                 showError("No focused Space reported by yabai")
                 return
             }
             clearError()
-            renderer.render(spaces: selection, resolver: iconResolver)
+            renderer.render(spaces: selection, menuSpaces: NeighborSelector.select(from: snapshot, allSpaces: true), resolver: iconResolver)
         case let .failure(error):
             showError(String(describing: error))
         }
