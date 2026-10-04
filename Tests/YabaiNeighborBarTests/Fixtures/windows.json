@@ -1,0 +1,67 @@
+[
+  {
+    "id": 101,
+    "pid": 1001,
+    "app": "AppOne",
+    "title": "one",
+    "display": 1,
+    "space": 1,
+    "has-focus": false,
+    "is-floating": true,
+    "is-sticky": false
+  },
+  {
+    "id": 102,
+    "pid": 2002,
+    "app": "AppTwo",
+    "title": "two-a",
+    "display": 1,
+    "space": 2,
+    "has-focus": true
+  },
+  {
+    "id": 103,
+    "pid": 2002,
+    "app": "AppTwo",
+    "title": "two-b",
+    "display": 1,
+    "space": 2,
+    "has-focus": false
+  },
+  {
+    "id": 104,
+    "pid": 3003,
+    "app": "AppThree",
+    "title": "three",
+    "display": 1,
+    "space": 2,
+    "has-focus": false
+  },
+  {
+    "id": 105,
+    "pid": 4004,
+    "app": "AppFour",
+    "title": "four",
+    "display": 1,
+    "space": 3,
+    "has-focus": false
+  },
+  {
+    "id": 106,
+    "pid": 5005,
+    "app": "AppFive",
+    "title": "five",
+    "display": 1,
+    "space": 3,
+    "has-focus": false
+  },
+  {
+    "id": 201,
+    "pid": 6006,
+    "app": "AppSix",
+    "title": "six",
+    "display": 2,
+    "space": 5,
+    "has-focus": false
+  }
+]
